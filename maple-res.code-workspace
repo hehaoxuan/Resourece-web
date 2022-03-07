@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "..\\..\\framework\\react\\react-atguigu\\react_extension"
+		},
+		{
+			"path": "..\\..\\framework\\react\\react-atguigu"
+		},
+		{
+			"path": "..\\..\\Javascript"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"liveServer.settings.multiRootWorkspaceName": "Javascript"
+	}
+}
