@@ -3,8 +3,8 @@ import { Layout} from 'antd';
 
 
 const { Header } = Layout;
-import Search from '@/pages/Header/components/SearchSide';
-import HeadMenu from '@/pages/Header/components/headMenu';
+import Search from '@/pages/header/components/SearchSide';
+import HeadMenu from '@/pages/header/components/headMenu';
 import style from './index.less';
 
 export default class index extends Component {

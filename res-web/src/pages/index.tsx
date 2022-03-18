@@ -1,4 +1,4 @@
-import App from './App'
+import App from './app'
 export default function IndexPage(props:any) {
   return (
     <div>
