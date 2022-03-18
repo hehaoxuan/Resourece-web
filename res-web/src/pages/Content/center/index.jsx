@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import ContextList from '@/common/contextList/index';
+import ContextList from '@/pages/content/center/components/contextList';
 import PageHead from '@/common/pageHead/pageHead'
 export default class index extends Component {
-  state = { navData: this.props.location.state };
+  state = {};
 
   render() {
     return (
       <Fragment>
-        <PageHead navData={this.state.navData} />
+        <PageHead navData={{ title: '素材中心', subTitle: '当下最热门的素材' }} />
+        {/* 内容中心 */}
         <ContextList />
       </Fragment>
     );
