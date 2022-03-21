@@ -5,7 +5,7 @@ export default class index extends Component<any>{
   render() {
     return (
       <div>
-          <PageHead navData={this.state.navData} />
+          <PageHead navData={{ title: '搜索', subTitle: '搜索资源' }} />
       </div>
     )
   }

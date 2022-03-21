@@ -3,6 +3,7 @@ import Header from '../header/Index';
 import Footer from '../footer/index';
 import Content from '../content/index';
 import styles from '../index.less';
+import '../../tools/rem.js'
 
 export default class App extends Component {
   render() {

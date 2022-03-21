@@ -1,6 +1,14 @@
-.list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content:center;
-    align-items: center;
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+@supports(display: grid) {
+  .list {
+      display: grid;
+      grid-template-columns: repeat(4,auto);
+      justify-content: space-around;
+  }
 }

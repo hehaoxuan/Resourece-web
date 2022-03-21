@@ -1,10 +1,17 @@
+import PageHead from "@/common/pageHead/pageHead";
+import Recommon from "@/common/recommon";
+import Video from '@/common/Video'
+import DetailText from '@/common/DetailText'
+import DetailTool from "@/common/deatilTool";
+
 const videoDtail = () => {
   return (
     <div>
-      <div className="">标题</div>
-      <div className="">视频</div>
-      <div className="">详细</div>
-      <div className="">工具 mark</div>
+      <PageHead  navData={{ title: '闪电六连鞭', subTitle: '' }}/>
+      <Video/>
+      <DetailText/>
+      <DetailTool/>
+      {/* <Recommon/> */}
     </div>
   );
 };
