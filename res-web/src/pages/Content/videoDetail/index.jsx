@@ -1,4 +1,4 @@
-import PageHead from "@/common/pageHead/pageHead";
+import PageHead from "@/common/pageHead";
 import Recommon from "@/common/recommon";
 import Video from '@/common/Video'
 import DetailText from '@/common/DetailText'

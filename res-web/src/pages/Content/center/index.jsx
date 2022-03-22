@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import ContextList from '@/pages/content/center/components/contextList';
-import PageHead from '@/common/pageHead/pageHead'
+import PageHead from '@/common/pageHead'
 export default class index extends Component {
   state = {};
 
