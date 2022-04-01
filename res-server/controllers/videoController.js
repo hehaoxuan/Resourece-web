@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
+
 const video_all = (req, res) => { //返回所有的video信息
 }
 
@@ -8,7 +9,7 @@ const video_all = (req, res) => { //返回所有的video信息
 const video_get_id = (req, res) => {
     const {id:videoId} = req.params
     // console.log(req)
-    var file = path.resolve(__dirname, `../resources/video/01/${videoId}.mp4`);
+    var file = path.resolve(__dirname, `../resources/video/${videoId}.mp4`);
     console.log(file);
 
     fs.stat(file, function (err, stats) {
@@ -47,10 +48,20 @@ const video_get_point = (req,res)=>{
 
 }
 
+const video_upload = (req,res)=>{
+    console.log(req.files);
 
+    res.send('upload success!');
+}
+const video_upload_img = (req,res)=>{
+    console.log(req.files);
+    res.send('upload success!');
+}
 module.exports = {
     video_all,
     video_get_id,
     video_get_download,
-    video_get_point
+    video_get_point,
+    video_upload,
+    video_upload_img
 }

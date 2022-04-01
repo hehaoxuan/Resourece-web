@@ -15,38 +15,70 @@ import {
 const { TextArea } = Input;
 import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import UploadDrag from '@/pages/content/upload/components/UploadDrag';
+import style from './UploadFrom.less';
 
+// 获取base64url
 function getBase64(img: any, callback: Function) {
   const reader = new FileReader();
   reader.addEventListener('load', () => callback(reader.result));
   reader.readAsDataURL(img);
 }
 
+// 上传之前的校验
 function beforeUpload(file: any) {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!');
+    message.error('只能上传 JPG/PNG 文件的格式!');
   }
-  const isLt2M = file.size / 1024 / 1024 < 2;
+  const isLt2M = file.size / 1024 / 1024 < 4;
   if (!isLt2M) {
-    message.error('Image must smaller than 2MB!');
+    message.error('图片大小必须小于 4MB!');
   }
   return isJpgOrPng && isLt2M;
 }
+
+//格式化部分表格信息
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 0,
+      offset: 0,
+    },
+    sm: {
+      span: 4,
+      offset: 3,
+    },
+  },
+};
+
+// 表格校验
+const normFile = (e) => {  //如果是typescript, 那么参数写成 e: any
+  console.log('Upload event:', e);
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e && e.fileList;
+};
 
 export default class UploadForm extends Component {
   state = {
     loading: false,
   };
 
+  // 上传事件
   onFinish = (values: any) => {
-    console.log('Success:', values);
+    this.setState({...this.state,...values})
+    console.log(this.state);
+    
   };
 
+  // 失败上传回调
   onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
 
+  // 控制上传组件功能
   handleChange = (info: any) => {
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
@@ -63,6 +95,11 @@ export default class UploadForm extends Component {
     }
   };
 
+  // 获取视频上传内容
+  handleVideoData = (info: any) => {
+    this.setState({...this.state,video:{...info}})
+  };
+
   render() {
     const { loading, imageUrl } = this.state;
     const uploadButton = (
@@ -75,26 +112,36 @@ export default class UploadForm extends Component {
       <div>
         <Form
           name="basic"
-          labelCol={{ span: 4 }}
-          wrapperCol={{ span: 6 }}
+          labelCol={{ span: 3, offset: -1 }}
           initialValues={{ remember: true }}
           onFinish={this.onFinish}
           onFinishFailed={this.onFinishFailed}
           autoComplete="off"
+          labelWrap={false}
+          labelAlign="right"
         >
-          <Form.Item label="选择素材类型">
+          {/* 视频组件 */}
+          <Form.Item name="videoName">
+            <div className={style.UploadDrag}>
+              <UploadDrag handleVideoData={this.handleVideoData} />
+            </div>
+          </Form.Item>
+
+          {/* 视频类型选择 */}
+          <Form.Item label="素材类型" name="type">
             <Select>
               <Select.Option value="video">视频素材</Select.Option>
             </Select>
           </Form.Item>
 
-          <Form.Item label="上传封面">
+          {/* 封面选择 */}
+          <Form.Item label="上传封面" name="avata" valuePropName="fileList"  getValueFromEvent={normFile} >
             <Upload
               name="avatar"
               listType="picture-card"
               className="avatar-uploader"
               showUploadList={false}
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              action="http://localhost:8081/video/uploadIMG"
               beforeUpload={beforeUpload}
               onChange={this.handleChange}
             >
@@ -106,14 +153,18 @@ export default class UploadForm extends Component {
             </Upload>
           </Form.Item>
 
-          <Form.Item label="标题">
+          {/* 标题输入 */}
+          <Form.Item label="标题" name="title">
             <Input />
           </Form.Item>
-          <Form.Item label="素材描述">
+
+          {/* 素材描述 */}
+          <Form.Item label="素材描述" name="describe">
             <TextArea rows={4} placeholder="输入对该素材的描述" maxLength={6} />
           </Form.Item>
 
-          <Form.Item >
+          {/* 确认上传 */}
+          <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
               确认上传
             </Button>
