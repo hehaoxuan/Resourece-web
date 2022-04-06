@@ -6,7 +6,7 @@ const { Dragger } = Upload;
 import style from './UploadDrag.less';
 export default function UploadDrag(props) {
   const prop = {
-    accept:'video/*',
+    accept: 'video/*',
     name: 'file',
     multiple: true,
     action: 'http://localhost:8081/video/uploadVideo',
@@ -22,8 +22,8 @@ export default function UploadDrag(props) {
     onChange(info) {
       const { status } = info.file;
       if (status !== 'uploading') {
-        const {handleVideoData} = props
-        handleVideoData(info.file)
+        const { handleVideoData } = props;
+        handleVideoData(info.file);
       }
       if (status === 'done') {
         message.success(`${info.file.name} 文件成功上传.`);
@@ -38,7 +38,12 @@ export default function UploadDrag(props) {
   };
 
   return (
-    <Dragger {...prop}{...props} className={style.dragger}>
+    <Dragger
+      {...prop}
+      {...props}
+      className={style.dragger}
+      data={(data) => data}
+    >
       <p className="ant-upload-drag-icon">
         <InboxOutlined />
       </p>

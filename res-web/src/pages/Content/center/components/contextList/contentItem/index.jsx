@@ -11,11 +11,12 @@ const { Meta } = Card;
 
 export default function index(props) {
   console.log(props);
+  const {title,description,onClick} = props
   return (
     <div className={style.item} >
       <Card
         className={style.card}
-        {...props}
+        onClick = {onClick}
         cover={
           <img
             alt="example"
@@ -31,8 +32,8 @@ export default function index(props) {
       >
         <Meta
           avatar={<Avatar src="https://joeschmoe.io/api/v1/random" />}
-          title="Card title"
-          description="This is the description"
+          title={title}
+          description={description}
         />
       </Card>
     </div>

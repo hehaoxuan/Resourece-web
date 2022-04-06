@@ -9,7 +9,7 @@ export default function video() {
   return (
     <div>
       <ReactPlayer
-        url="http://localhost:8081/video/123"
+        url="http://localhost:8081/video/16488867466033"
         controls={true}
         className ={style.video}
       />
