@@ -6,7 +6,6 @@ import { withRouter,useHistory } from 'umi';
 export default withRouter((props) => {
   const {title,subTitle} = props.navData
   const history = useHistory();
-  console.log(props);
   const goback = ()=>{
     history.goBack()
   }

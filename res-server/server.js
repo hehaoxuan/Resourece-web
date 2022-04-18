@@ -4,6 +4,9 @@ const { connectDB } = require('./database/index.js')
 
 const app = express();
 
+
+
+// /[a-zA-Z]+\/[a-zA-Z]+/
 app.all(/[a-zA-Z]+\/[a-zA-Z]+/, (req, res, next) => {
   // google需要配置，否则报错cors error
   res.setHeader('Access-Control-Allow-Credentials', 'true')
@@ -24,7 +27,6 @@ app.all(/[a-zA-Z]+\/[a-zA-Z]+/, (req, res, next) => {
 
 app.use('/video', videoRoute)
 app.use(express.urlencoded())
-
 
 connectDB()
 const server = app.listen(8081, function () {

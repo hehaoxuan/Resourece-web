@@ -11,7 +11,6 @@ export default class index extends Component {
     return (
       <Fragment>
         <PageHead navData={{ title: '上传', subTitle: '从这里上传素材' }}/>
-
       <div className={style.UploadForm}>
         <UploadForm/>
       </div>

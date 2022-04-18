@@ -6,7 +6,7 @@ import { Link } from 'umi';
 import { AppstoreAddOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import Search from '@/pages/header/components/SearchSide';
 
-export default class headMenu extends Component<any> {
+export default class headMenu extends Component {
   state = {
     current: 'main',
     menuList: [
@@ -104,7 +104,7 @@ export default class headMenu extends Component<any> {
     ],
   };
 
-  handleClick = (e: any) => {
+  handleClick = (e) => {
     console.log(e);
     this.setState({ current: e.key });
   };

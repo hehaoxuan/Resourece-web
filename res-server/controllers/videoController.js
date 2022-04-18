@@ -4,7 +4,7 @@ var oldpath_img = null
 var newpath_img = null
 var oldpath_video = null
 var newpath_video = null
-const { connectDB, insert, findAll } = require('../database/index.js')
+const { insert, findAll, findByUid,search} = require('../database/index.js')
 
 String.prototype.getUid = function () {
     return this.replace(/[^0-9]+/g, '')
@@ -23,53 +23,98 @@ const rename = (oldpath, newpath) => {
 }
 
 // 获取所有的视频表单
-const video_all = async(req, res) => { //返回所有的video信息
-    const sendRes = (data)=>{
+const video_all = async (req, res) => { //返回所有的video信息
+    const sendRes = (data) => {
         res.send(data)
     }
     findAll(sendRes) //使用回调函数的形式进行异步的数据发送
 }
 
-// 获取根据uid获取单个视频信息
-const video_get_id = (req, res) => {
+// 视频流服务
+const video_play = (req, res) => {
     const { id: videoId } = req.params
     // console.log(req)
     var file = path.resolve(__dirname, `../resources/video/${videoId}.mp4`);
     console.log(file);
-
-    fs.stat(file, function (err, stats) {
+    // 判断文件是否存在 若不存在则不进行视频流的播放
+    fs.access(file, function (err) {
         if (err) {
-            res.end(err);
+            res.send(err)
         }
-        var positions = req.headers.range.replace(/bytes=/, "").split("-");
-        var start = parseInt(positions[0], 10);
-        var total = stats.size;
-        var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-        var chunksize = end - start + 1;
+        else {
+            fs.stat(file, function (err, stats) {
+                if (err) {
+                    res.end(err);
+                }
+                var positions = req.headers.range.replace(/bytes=/, "").split("-");
+                var start = parseInt(positions[0], 10);
+                var total = stats.size;
+                var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+                var chunksize = end - start + 1;
 
-        res.writeHead(206, {
-            "Content-Range": "bytes " + start + "-" + end + "/" + total,
-            "Accept-Ranges": "bytes",
-            "Content-Length": chunksize,
-            "Content-Type": "video/mp4",
-        });
+                res.writeHead(206, {
+                    "Content-Range": "bytes " + start + "-" + end + "/" + total,
+                    "Accept-Ranges": "bytes",
+                    "Content-Length": chunksize,
+                    "Content-Type": "video/mp4",
+                });
 
-        var stream = fs
-            .createReadStream(file, { start: start, end: end })
-            .on("open", function () {
-                stream.pipe(res);
-            })
-            .on("error", function (err) {
-                res.end(err);
+                var stream = fs
+                    .createReadStream(file, { start: start, end: end })
+                    .on("open", function () {
+                        stream.pipe(res);
+                    })
+                    .on("error", function (err) {
+                        res.end(err);
+                    });
             });
-    });
+        }
+    })
+
+}
+
+// 根据id来获取视频的详细信息
+const video_get_id = (req, res) => {
+    const sendRes = (data) => {
+        res.send(data)
+    }
+    let { id } = req.params
+    findByUid(id, sendRes)
+}
+
+// 获取视频的封面
+const video_cover = (req, res) => {
+    const { id } = req.params
+    // 根据id查找数据库中图片对于的地址
+    const getAvator = (data) => {
+        console.log(data);
+        const file = data[0].imgUrl
+        // // 判断文件是否存在 若不存在则不进行视频流的播放
+        console.log(file);
+        fs.access(file, function (err) {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                const cs = fs.createReadStream(file)
+                cs.on("data", chunk => {
+                    res.write(chunk)
+                })
+                cs.on("end", () => {
+                    res.status(200);
+                    res.end();
+                })
+            }
+        })
+    }
+
+    findByUid(id, getAvator)
 }
 
 // 根据uid下载视频
 const video_get_download = (req, res) => {
 
 }
-
 
 // 上传视频接口
 const video_upload = (req, res) => {
@@ -95,11 +140,12 @@ const video_upload_img = (req, res) => {
 
 // 上传视频表单信息
 const video_upload_data = (req, res) => {
-    res.send('upload success!');
+
     let data = JSON.parse(Object.keys(req.body)[0])
     console.log('表单数据为' + data);
     // 上传条件判断 不可重复上传 不可重复录入数据库
     if (oldpath_img && newpath_img && oldpath_video && newpath_video) {
+        res.send({ status: true });
         rename(oldpath_video, newpath_video)
         rename(oldpath_img, newpath_img)
         //将零时的资源文件重命名 并移动到对应的文件夹下
@@ -111,16 +157,29 @@ const video_upload_data = (req, res) => {
         insert(data)
         // 处理数据
         ldpath_img = newpath_img = oldpath_video = newpath_video = null
+    } else {
+        res.send({ status: false });
     }
+}
 
-    findAll()
+// 搜索视频信息
+const video_search = (req, res) => {
+    const sendRes = (data) => {
+        res.send(data)
+    }
+    console.log(req.params);
+    let { key } = req.params
+    search(key, sendRes)
 }
 
 module.exports = {
     video_all,
-    video_get_id,
+    video_play,
     video_get_download,
     video_upload,
     video_upload_img,
-    video_upload_data
+    video_upload_data,
+    video_get_id,
+    video_cover,
+    video_search
 }

@@ -28,7 +28,7 @@ const findAll = (sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        dbo.collection(rcollection).find({}).toArray(function (err, result) { // 返回集合中所有数据
+        dbo.collection(rcollection).find({}).sort({ _id: -1 }).toArray(function (err, result) { // 返回集合中所有数据
             if (err) throw err;
             db.close();
             sendRes(result)
@@ -36,14 +36,14 @@ const findAll = (sendRes) => {
     });
 }
 
-const findByUid = (uid) => {
+const findByUid = (uid, sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        var whereStr = { "uid": uid };  // 查询条件
+        var whereStr = { "videoUid": uid };  // 查询条件
         dbo.collection(rcollection).find(whereStr).toArray(function (err, result) {
             if (err) throw err;
-            console.log(result);
+            sendRes(result)
             db.close();
         });
     });
@@ -61,9 +61,26 @@ const insert = (myobj) => {
     });
 }
 
+const search = (keywords, sendRes) => {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db(rdb);
+        var whereStr = {$or:[{"title":new RegExp(keywords)},{"describe": new RegExp(keywords)}]};  // 查询条件
+        console.log(whereStr);
+        dbo.collection(rcollection).find(whereStr).toArray(function (err, result) {
+            if (err) throw err;
+            console.log(result);
+            sendRes(result)
+            db.close();
+        });
+    });
+}
+
 module.exports = {
     createCollection,
     connectDB,
     insert,
-    findAll
+    findAll,
+    findByUid,
+    search
 }
