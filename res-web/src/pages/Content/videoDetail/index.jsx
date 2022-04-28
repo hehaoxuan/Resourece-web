@@ -6,16 +6,19 @@ import DetailTool from '@/common/deatilTool';
 import { useState } from 'react';
 import { useHistory } from 'umi';
 import { useEffect } from 'react';
-import {computeVideo,getVideoDeatil} from '@/api/video'
+import {computeVideo,getVideoDeatil,computeVideoDownload} from '@/api/video'
 
 const videoDtail = () => {
   const [url, setUrl] = useState('');
+  const [urlDownload, setUrlDownload] = useState('');
   const [pageHeadData, setPageHeadData] = useState('');
   const [detailData, setDetailData] = useState('');
   const history = useHistory();
   const uid = history.location.pathname.replace(/[^0-9]+/, '')
   useEffect(() => {
     setUrl(computeVideo(uid));
+    setUrlDownload(computeVideoDownload(uid))
+
     getVideoDeatil(uid).then((res)=>{
       setPageHeadData({
         title:res[0].title
@@ -32,7 +35,7 @@ const videoDtail = () => {
       {/* 传入uid 给视频组件 */}
       <Video url={url}/>
       <DetailText {...detailData}/>
-      <DetailTool />
+      <DetailTool url={urlDownload}/>
       {/* <Recommon/> */}
     </div>
   );

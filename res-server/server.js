@@ -1,6 +1,9 @@
 const express = require("express");
 const videoRoute = require("./routes/video");
-const { connectDB } = require('./database/index.js')
+const userRoute = require("./routes/user")
+const { connectDB } = require('./database/video.js')
+
+const bodyParser = require('body-parser')
 
 const app = express();
 
@@ -24,9 +27,13 @@ app.all(/[a-zA-Z]+\/[a-zA-Z]+/, (req, res, next) => {
   )
   next()
 })
+app.use(express.urlencoded())
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 app.use('/video', videoRoute)
-app.use(express.urlencoded())
+app.use('/user', userRoute)
 
 connectDB()
 const server = app.listen(8081, function () {

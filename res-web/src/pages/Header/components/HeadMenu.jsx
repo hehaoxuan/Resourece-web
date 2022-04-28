@@ -4,7 +4,7 @@ import { Layout, Menu } from 'antd';
 const { SubMenu } = Menu;
 import { Link } from 'umi';
 import { AppstoreAddOutlined, CloudUploadOutlined } from '@ant-design/icons';
-import Search from '@/pages/header/components/SearchSide';
+import Search from '@/pages/header/components/SearchSide'; 
 
 export default class headMenu extends Component {
   state = {

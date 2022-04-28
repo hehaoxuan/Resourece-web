@@ -12,6 +12,7 @@ const {
 
 var mutipart= require('connect-multiparty');
 const bodyParser=require("body-parser");
+// url解析
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 var mutipartMiddeware = mutipart();
@@ -33,12 +34,7 @@ router.post('/uploadIMG',mutipartMiddeware,video_upload_img) //上传图片
 
 // router.get('/:id/point', video_get_point)
 
-
 /* todo */
 // router.get('/:id/recommon', video_get_recommon)
-
-
-
-
 
 module.exports = router

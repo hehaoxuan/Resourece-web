@@ -6,7 +6,7 @@ export default class index extends Component {
   render() {
     return (
         <Footer style={{ textAlign: 'center' }}>
-        Ant Design ©2018 Created by Ant UED
+         基于树莓派的视频资源收集、管理、展示系统 ©2022 Created by hehaoxuan
       </Footer>
     )
   }

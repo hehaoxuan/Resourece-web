@@ -33,6 +33,10 @@ const computeVideo = (url) => {
     return `${server}/${url}`
 }
 
+const computeVideoDownload = (url) => {
+    return `${server}/${url}/download`
+}
+
 const computeCover = (url) => {
     return `${server}/${url}/cover`
 }
@@ -60,5 +64,6 @@ export {
     getVideoDeatil,
     getVideoCover,
     computeCover,
-    search
+    search,
+    computeVideoDownload
 }
