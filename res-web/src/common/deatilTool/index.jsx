@@ -1,13 +1,42 @@
-import { DownloadOutlined } from '@ant-design/icons';
-import { Button, Radio } from 'antd';
+import {
+  DownloadOutlined,
+  StopOutlined,
+  CheckCircleOutlined,
+} from '@ant-design/icons';
+import { Button, Radio, message } from 'antd';
+import { setCookie, getCookie } from '@/tools/storage';
 import style from './index.less';
+import { videoAuditing } from '@/api/video';
+import { useState, useEffect } from 'react';
+import { withRouter,useHistory} from 'umi';
 function detailTool(props) {
-  const { url } = props;
+  const history =useHistory()
+  const { url, uid, auditing, handleAuditing } = props;
+  const [isRoot, setisRoot] = useState(false);
+  useEffect(() => {
+    if (getCookie('authority') && JSON.parse(getCookie('authority'))) {
+      setisRoot(true);
+    }else{
+      setisRoot(false)
+    }
+  }, []);
   const handleClick = () => {
-    let a = document.createElement("a");
+    let a = document.createElement('a');
     a.href = url;
     a.click();
   };
+
+  const handleAuditingClick = () => {
+    videoAuditing(uid, !auditing);
+    handleAuditing(!auditing);
+    message.success('操作成功');
+    if(!auditing){ //点击确定审核
+      history.push('/auditing')
+    }else{
+      history.push('/video')
+    }
+  };
+
   return (
     <div>
       <Button
@@ -17,9 +46,27 @@ function detailTool(props) {
         size={'large'}
         className={style.icon}
         onClick={() => handleClick()}
-      >下载</Button>
+      >
+        下载
+      </Button>
+      {isRoot ? (
+        <Button
+          type="defulat"
+          shape="round"
+          icon={
+            JSON.parse(auditing) ? <StopOutlined /> : <CheckCircleOutlined />
+          }
+          size={'large'}
+          className={style.icon}
+          onClick={() => handleAuditingClick()}
+        >
+          {JSON.parse(auditing) ? '撤销审核' : '确定审核'}
+        </Button>
+      ) : (
+        ''
+      )}
     </div>
   );
 }
 
-export default detailTool;
+export default withRouter(detailTool);

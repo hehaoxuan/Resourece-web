@@ -40,7 +40,7 @@ const sessionStorageRemove = (key) => {
   window.sessionStorage.removeItem(key);
 }
 
-// 1、设置cookie
+// 1、设置cookie 键名 值 过期时间(天)
 const setCookie = (key, value, expire) => {
   const d = new Date()
   d.setDate(d.getDate() + expire);

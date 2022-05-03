@@ -6,9 +6,6 @@ const upload = async (params) => {
     return await axios({
         method: 'post',
         url: server + '/uploadData',
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded'
-        },
         data: {
             ...params
         },
@@ -19,6 +16,23 @@ const getAll = async () => {
     return await axios({
         method: 'get',
         url: server + '/all',
+    }).then(res => res.data)
+}
+
+
+const getAllAuditing = async (auditing) => {
+    return await axios({
+        method: 'post',
+        url: server + '/allAuditing',
+        data: { 'auditing': auditing }
+    }).then(res => res.data)
+}
+
+const videoAuditing = async (uid, auditing) => {
+    return await axios({
+        method: 'post',
+        url: server + '/auditing',
+        data: { 'auditing': auditing, 'uid': uid }
     }).then(res => res.data)
 }
 
@@ -65,5 +79,7 @@ export {
     getVideoCover,
     computeCover,
     search,
-    computeVideoDownload
+    computeVideoDownload,
+    getAllAuditing,
+    videoAuditing
 }

@@ -8,7 +8,9 @@ const {
     insert,
     findAll,
     findByUid,
-    search
+    search,
+    findAllIsAuditing,
+    auditingByUid
 } = require("../database/video.js");
 
 String.prototype.getUid = function () {
@@ -26,7 +28,7 @@ const rename = (oldpath, newpath) => {
     });
 };
 
-// 获取所有的视频表单
+// 获取所有的视频表单 包含审核以及未审核的内容
 const video_all = async (req, res) => {
     //返回所有的video信息
     const sendRes = (data) => {
@@ -34,6 +36,19 @@ const video_all = async (req, res) => {
     };
     findAll(sendRes); //使用回调函数的形式进行异步的数据发送
 };
+
+// 获取所有的视频表单
+const video_all_auditing = async (req, res) => {
+    //返回所有的video信息
+    let {auditing} = req.body
+    auditing = JSON.parse(auditing)
+
+    const sendRes = (data) => {
+        res.send(data);
+    };
+    findAllIsAuditing(auditing,sendRes); //使用回调函数的形式进行异步的数据发送
+};
+
 
 // 视频流服务
 const video_play = (req, res) => {
@@ -99,10 +114,10 @@ const video_cover = (req, res) => {
     } = req.params;
     // 根据id查找数据库中图片对于的地址
     const getAvator = (data) => {
-        console.log(data);
+        // console.log(data);
         const file = data[0].imgUrl;
         // // 判断文件是否存在 若不存在则不进行视频流的播放
-        console.log(file);
+        // console.log(file);
         fs.access(file, function (err) {
             if (err) {
                 res.send(err);
@@ -150,6 +165,16 @@ const video_get_download = (req, res) => {
     });
 };
 
+const video_auditing_id = (req, res) => {
+    const {
+        uid: videoId,
+        auditing
+    } = req.body
+    console.log(videoId,auditing);
+    auditingByUid(videoId,JSON.parse(auditing))
+    res.send('success')
+};
+
 // 上传视频接口
 const video_upload = (req, res) => {
     res.send("upload success!");
@@ -183,8 +208,9 @@ const video_upload_img = (req, res) => {
 
 // 上传视频表单信息
 const video_upload_data = (req, res) => {
-    let data = JSON.parse(Object.keys(req.body)[0]);
-    console.log("表单数据为" + data);
+    let data = req.body
+
+    // console.log("表单数据为" + data);
     // 上传条件判断 不可重复上传 不可重复录入数据库
     if (oldpath_img && newpath_img && oldpath_video && newpath_video) {
         res.send({
@@ -219,6 +245,7 @@ const video_search = (req, res) => {
     search(key, sendRes);
 };
 
+
 module.exports = {
     video_all,
     video_play,
@@ -229,4 +256,6 @@ module.exports = {
     video_get_id,
     video_cover,
     video_search,
+    video_auditing_id,
+    video_all_auditing
 };

@@ -3,9 +3,8 @@ import Recommon from '@/common/recommon';
 import Video from '@/common/Video';
 import DetailText from '@/common/DetailText';
 import DetailTool from '@/common/deatilTool';
-import { useState } from 'react';
+import { useState,useEffect  } from 'react';
 import { useHistory } from 'umi';
-import { useEffect } from 'react';
 import {computeVideo,getVideoDeatil,computeVideoDownload} from '@/api/video'
 
 const videoDtail = () => {
@@ -13,6 +12,7 @@ const videoDtail = () => {
   const [urlDownload, setUrlDownload] = useState('');
   const [pageHeadData, setPageHeadData] = useState('');
   const [detailData, setDetailData] = useState('');
+  const [auditing, setAuditing] = useState(false);
   const history = useHistory();
   const uid = history.location.pathname.replace(/[^0-9]+/, '')
   useEffect(() => {
@@ -26,8 +26,15 @@ const videoDtail = () => {
       setDetailData({
         article:res[0].describe
       })
+      setAuditing(
+        res[0].auditing
+      )
     })
   }, []);
+
+  const handleAuditing = (auditing)=>{
+    setAuditing(auditing)
+  }
 
   return (
     <div>
@@ -35,7 +42,7 @@ const videoDtail = () => {
       {/* 传入uid 给视频组件 */}
       <Video url={url}/>
       <DetailText {...detailData}/>
-      <DetailTool url={urlDownload}/>
+      <DetailTool url={urlDownload} uid={uid} auditing={auditing} handleAuditing={handleAuditing}/>
       {/* <Recommon/> */}
     </div>
   );

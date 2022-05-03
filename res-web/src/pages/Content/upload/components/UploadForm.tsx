@@ -17,8 +17,9 @@ import { Upload, message } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import UploadDrag from '@/pages/content/upload/components/UploadDrag';
 import style from './UploadFrom.less';
-import { upload, getAll } from '@/api/video';
+import { upload } from '@/api/video';
 import { withRouter } from 'umi';
+import { setCookie, getCookie, delCookie } from '@/tools/storage';
 
 // 获取base64url
 function getBase64(img: any, callback: Function) {
@@ -69,6 +70,8 @@ export default withRouter(
   class UploadForm extends Component {
     state = {
       loading: false,
+      userName: getCookie('userName'),
+      auditing: false,
     };
 
     // 上传事件

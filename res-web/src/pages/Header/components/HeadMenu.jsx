@@ -4,7 +4,8 @@ import { Layout, Menu } from 'antd';
 const { SubMenu } = Menu;
 import { Link } from 'umi';
 import { AppstoreAddOutlined, CloudUploadOutlined } from '@ant-design/icons';
-import Search from '@/pages/header/components/SearchSide'; 
+import Search from '@/pages/header/components/SearchSide';
+import { setCookie, getCookie, delCookie } from '@/tools/storage';
 
 export default class headMenu extends Component {
   state = {
@@ -19,7 +20,7 @@ export default class headMenu extends Component {
         isSub: false,
         key: 'sourceCenter',
         icon: <AppstoreAddOutlined />,
-        name: '素材中心', 
+        name: '素材中心',
         to: '/video',
       },
       {
@@ -108,6 +109,43 @@ export default class headMenu extends Component {
     console.log(e);
     this.setState({ current: e.key });
   };
+
+  componentDidMount() {
+    if (getCookie('authority') && JSON.parse(getCookie('authority'))) {
+      let newState = this.state.menuList;
+      newState.push({
+        key: 'auditing',
+        to: '/auditing',
+        name: '审核',
+      });
+      this.setState(newState);
+    }
+  }
+
+  componentDidUpdate() {
+    // 退出登陆后关闭审核
+    if (!getCookie('authority') && this.state.menuList.length === 6) {
+      let newState = this.state.menuList;
+      newState = newState.filter((item) => item.key !== 'auditing');
+      this.setState({ menuList: newState });
+      console.log(this.state.menuList);
+    }
+    // 登陆后增加审核
+    if (
+      getCookie('authority') &&
+      JSON.parse(getCookie('authority')) &&
+      this.state.menuList.length === 5
+    ) {
+      let newState = this.state.menuList;
+      newState.push({
+        key: 'auditing',
+        to: '/auditing',
+        name: '审核',
+      });
+      this.setState({ menuList: newState });
+      console.log(this.state.menuList);
+    }
+  }
 
   render() {
     const { current, menuList, sourceCenterList } = this.state;

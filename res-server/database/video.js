@@ -36,6 +36,35 @@ const findAll = (sendRes) => {
     });
 }
 
+const findAllIsAuditing = (isAuditing,sendRes) => {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db(rdb);
+        var whereStr = { "auditing": isAuditing };  // 查询条件
+        dbo.collection(rcollection).find(whereStr).sort({ _id: -1 }).toArray(function (err, result) { // 返回集合中所有数据
+            if (err) throw err;
+            db.close();
+            sendRes(result)
+        });
+    });
+}
+
+// 根据id审核视频
+const auditingByUid = (uid, auditing) => {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db(rdb);
+        var whereStr = { "videoUid": uid };  // 查询条件
+        var updateStr = {$set: { "auditing" : auditing }};
+
+        dbo.collection(rcollection).updateOne(whereStr, updateStr, function(err, res) {
+            if (err) throw err;
+            console.log("文档更新成功");
+            db.close();
+        });
+    });
+}
+
 const findByUid = (uid, sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
@@ -82,5 +111,7 @@ module.exports = {
     insert,
     findAll,
     findByUid,
-    search
+    search,
+    findAllIsAuditing,
+    auditingByUid
 }

@@ -69,7 +69,7 @@ const user_login = (req, res) => {
         }else if(data[0].password !== userdata.password){
             res.send({code:-2})
         }else if(data[0].password === userdata.password){
-            res.send({code:1})
+            res.send({code:1,token:data[0]._id,root:data[0].root})
         }
     }
 

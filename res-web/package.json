@@ -27,6 +27,10 @@
     "react": "17.x",
     "react-dom": "17.x",
     "react-player": "^2.9.0",
+    "react-redux": "^7.2.8",
+    "redux": "^4.2.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.4.1",
     "umi": "^3.5.20",
     "uuid": "^8.3.2"
   },

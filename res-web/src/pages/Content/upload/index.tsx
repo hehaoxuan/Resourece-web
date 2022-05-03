@@ -5,7 +5,7 @@ import UploadForm from '@/pages/content/upload/components/UploadForm'
 import style from '@/pages/content/upload/index.less'
 import PageHead from '@/common/pageHead';
 
-export default class index extends Component {
+class Index extends Component {
   state = {navData:this.props.location.state}
   render() {
     return (
@@ -18,3 +18,4 @@ export default class index extends Component {
     )
   }
 }
+export default Index

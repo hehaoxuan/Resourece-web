@@ -8,9 +8,11 @@ import 'particles.js';
 import '../../tools/particle.css';
 import { particle } from '../../public/data';
 import { withRouter } from 'umi';
-import Home from '@/pages/content/home'
+import Home from '@/pages/content/home';
 import { v4 as uuidv4 } from 'uuid';
-import {loalStorageSet} from '@/tools/storage.js'
+import { loalStorageSet } from '@/tools/storage.js';
+import { Provider } from 'react-redux';
+import store from '@/redux/store'
 
 export default withRouter(
   class App extends Component {
@@ -19,28 +21,28 @@ export default withRouter(
       // particlesJS('particles-js', {
       //   ...particle,
       // });
-      
+
       // 生成唯一id 并写入本地存储中
-      loalStorageSet('id',uuidv4())
+      loalStorageSet('id', uuidv4());
     }
 
     render() {
       const { props } = this;
-      const {pathname} = this.props.location
+      const { pathname } = this.props.location;
 
       return (
-        <div>
+        <Provider store={store}>
           <section id="particles-js"></section>
           <div className={styles.main}>
             <Header />
             <Content>
               {/* todo:当主页为/时展示该首页的内容 */}
-              {pathname==='/'&& <Home/>}
+              {pathname === '/' && <Home />}
               <div>{props.children}</div>
             </Content>
             <Footer />
           </div>
-        </div>
+        </Provider>
       );
     }
   },

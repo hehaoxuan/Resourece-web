@@ -7,7 +7,9 @@ const {
     video_upload_data,
     video_get_id,
     video_cover,
-    video_search
+    video_search,
+    video_all_auditing,
+    video_auditing_id
 } = require('../controllers/videoController')
 
 var mutipart= require('connect-multiparty');
@@ -20,6 +22,8 @@ const express = require('express') //调用构造函数 新建app
 const router = express.Router(); //使用express的router
 
 
+router.post('/allAuditing',mutipartMiddeware,video_all_auditing) //包含审核/未审核视频
+router.post('/auditing',mutipartMiddeware,video_auditing_id) //包含审核/未审核视频
 router.get('/all', video_all) // 所有视频
 router.get('/:id', video_play) //根据id获取视频，并提供视频
 router.get('/:id/download', video_get_download) //根据id下载
