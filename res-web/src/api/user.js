@@ -22,6 +22,14 @@ const register = async (params) => {
     }).then(res => res.data)
 }
 
+const changePassword = async (params) => {
+    return await axios({
+        method: 'post',
+        url: server + '/changePassword',
+        data: params,
+    }).then(res => res.data)
+}
+
 const login = async (params) => {
     return await axios({
         method: 'post',
@@ -34,5 +42,6 @@ const login = async (params) => {
 export {
     getvcode,
     register,
+    changePassword,
     login
 }

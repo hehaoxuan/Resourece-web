@@ -16,6 +16,7 @@ export default defineConfig({
         { path: '/search/:key', component: '@/pages/content/search' },
         { path: '/login', component: '@/pages/content/login' },
         { path: '/register', component: '@/pages/content/register' },
+        { path: '/changePassword', component: '@/pages/content/changePassword' },
         { path: '/auditing', component: '@/pages/content/auditing' },
       ],
     },

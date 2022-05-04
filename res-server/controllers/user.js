@@ -5,7 +5,8 @@ const { sendEmail, randomStr } = require('../tools/index');
 const { decrypt } = require('../tools/index')
 const {
     insert,
-    findByUsername
+    findByUsername,
+    changePwd
 } = require("../database/user.js");
 
 // 使用strarr来存储发送验证码的用户 并提供后续的比对
@@ -62,6 +63,40 @@ const user_register = (req, res) => {
     }
 };
 
+
+const user_change_password = (req, res) => {
+    let userdata = req.body
+    /* 根据id验证vcode是否正确 */
+    let aimstr = strarr.find(item => item.id === userdata.username)
+    console.log(aimstr, userdata.vcode);
+    if (!aimstr) {
+        res.send({ code: 0 }) //未发送验证码
+    } else {
+        if (aimstr && aimstr.str === userdata.vcode) { //证明验证码正确
+            /* 将密码解码 并处理数据*/
+            userdata.password = (decrypt(userdata.password));
+            userdata.newPassword = (decrypt(userdata.newPassword));
+            /* 根据id判断是否管理员 */
+            userdata.id === 'admin' ? userdata.root = true : userdata.root = false
+            delete userdata.vcode
+            delete userdata.id
+            findByUsername(userdata.username, (data) => {
+                if(data.length<=0){
+                    res.send({code:-1})
+                }else if(data[0].password !== userdata.password){
+                    res.send({code:-2})
+                }else if(data[0].password === userdata.password){
+                    // 原密码正确,修改密码
+                    changePwd(userdata);
+                    res.send({code:1})
+                }
+            })
+        } else {/* 若不正确则返回错误信息 */
+            res.send({ code: -1 }) //代表验证码错误
+        }
+    }
+};
+
 const user_login = (req, res) => {
     const checkpassword = function(data){
         if(data.length<=0){
@@ -86,5 +121,6 @@ const user_login = (req, res) => {
 module.exports = {
     user_sendVcode,
     user_register,
+    user_change_password,
     user_login
 };
