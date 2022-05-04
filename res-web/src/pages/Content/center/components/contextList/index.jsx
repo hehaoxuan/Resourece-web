@@ -39,7 +39,6 @@ export default withRouter(({ history, location, match, listData }) => {
 
   useEffect(() => {
     setItem(listData);
-    console.log(listData);
   }, [listData]);
 
   return (

@@ -1,4 +1,5 @@
 /* 根据cookie判定是否为管理员权限 */
+import { getCookie } from '@/tools/storage';
 import { useState, useEffect } from 'react';
 const useRoot = () => {
   const [isRoot, setisRoot] = useState(false);
@@ -9,7 +10,7 @@ const useRoot = () => {
       setisRoot(false);
     }
   }, []);
-  return { isRoot };
+  return isRoot;
 };
 
 export default useRoot;

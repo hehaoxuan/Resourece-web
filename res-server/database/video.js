@@ -28,7 +28,9 @@ const findAll = (sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        dbo.collection(rcollection).find({}).sort({ _id: -1 }).toArray(function (err, result) { // 返回集合中所有数据
+        dbo.collection(rcollection).find({}).sort({
+            _id: -1
+        }).toArray(function (err, result) { // 返回集合中所有数据
             if (err) throw err;
             db.close();
             sendRes(result)
@@ -36,12 +38,16 @@ const findAll = (sendRes) => {
     });
 }
 
-const findAllIsAuditing = (isAuditing,sendRes) => {
+const findAllIsAuditing = (isAuditing, sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        var whereStr = { "auditing": isAuditing };  // 查询条件
-        dbo.collection(rcollection).find(whereStr).sort({ _id: -1 }).toArray(function (err, result) { // 返回集合中所有数据
+        var whereStr = {
+            "auditing": isAuditing
+        }; // 查询条件
+        dbo.collection(rcollection).find(whereStr).sort({
+            _id: -1
+        }).toArray(function (err, result) { // 返回集合中所有数据
             if (err) throw err;
             db.close();
             sendRes(result)
@@ -54,10 +60,16 @@ const auditingByUid = (uid, auditing) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        var whereStr = { "videoUid": uid };  // 查询条件
-        var updateStr = {$set: { "auditing" : auditing }};
+        var whereStr = {
+            "videoUid": uid
+        }; // 查询条件
+        var updateStr = {
+            $set: {
+                "auditing": auditing
+            }
+        };
 
-        dbo.collection(rcollection).updateOne(whereStr, updateStr, function(err, res) {
+        dbo.collection(rcollection).updateOne(whereStr, updateStr, function (err, res) {
             if (err) throw err;
             console.log("文档更新成功");
             db.close();
@@ -69,7 +81,9 @@ const findByUid = (uid, sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        var whereStr = { "videoUid": uid };  // 查询条件
+        var whereStr = {
+            "videoUid": uid
+        }; // 查询条件
         dbo.collection(rcollection).find(whereStr).toArray(function (err, result) {
             if (err) throw err;
             sendRes(result)
@@ -90,16 +104,60 @@ const insert = (myobj) => {
     });
 }
 
+const updateOne = (uid,str) => {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db(rdb);
+        var whereStr = {
+            "videoUid": uid+''
+        }; // 查询条件
+        var updateStr = {
+            $set: {
+                ...str
+            }
+        };
+
+        console.log(updateStr);
+        var options = {"upsert":true}
+
+        dbo.collection(rcollection).updateOne(whereStr, updateStr,options, function (err, res) {
+            if (err) throw err;
+            console.log("文档更新成功");
+            db.close();
+        });
+    });
+}
+
 const search = (keywords, sendRes) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        var whereStr = {$or:[{"title":new RegExp(keywords)},{"describe": new RegExp(keywords)}]};  // 查询条件
+        var whereStr = {
+            $or: [{
+                "title": new RegExp(keywords)
+            }, {
+                "describe": new RegExp(keywords)
+            }]
+        }; // 查询条件
         console.log(whereStr);
         dbo.collection(rcollection).find(whereStr).toArray(function (err, result) {
             if (err) throw err;
             console.log(result);
             sendRes(result)
+            db.close();
+        });
+    });
+}
+
+const deleteByUid = (uid) => {
+    MongoClient.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db(rdb);
+        var whereStr = {
+            "videoUid": uid
+        }; // 查询条件
+        dbo.collection(rcollection).deleteOne(whereStr, function (err, obj) {
+            if (err) throw err;
             db.close();
         });
     });
@@ -113,5 +171,7 @@ module.exports = {
     findByUid,
     search,
     findAllIsAuditing,
-    auditingByUid
+    auditingByUid,
+    deleteByUid,
+    updateOne
 }

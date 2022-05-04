@@ -29,8 +29,8 @@ function Login(props) {
         setCookie('token',token,30) //设置token
         setCookie('authority',root,30) //设置权限认证
         setCookie('userName',values.username) //设置用户名
-        props.changeLogin(true) //使用redux设置为登陆状态
-        props.authorityUser(root) //使用redux设置为管理员
+        // props.changeLogin(true) //使用redux设置为登陆状态
+        // props.authorityUser(root) //使用redux设置为管理员
         setTimeout(() => {
           message.success('登陆成功');
           // 跳转到主页

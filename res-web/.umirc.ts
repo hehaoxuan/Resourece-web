@@ -10,6 +10,7 @@ export default defineConfig({
       routes: [
         { path: '/video', component: '@/pages/content/center' },
         { path: '/video/:id', component: '@/pages/content/videoDetail' },
+        { path: '/videoEdit/:id', component: '@/pages/content/editPage/index' },
         { path: '/upload', component: '@/pages/content/upload',wrappers:['@/pages/content/upload/wrappers/auth']},
         { path: '/about', component: '@/pages/content/about' },
         { path: '/recommond', component: '@/pages/content/recommon' },

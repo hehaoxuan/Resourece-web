@@ -10,7 +10,9 @@ const {
     findByUid,
     search,
     findAllIsAuditing,
-    auditingByUid
+    auditingByUid,
+    deleteByUid,
+    updateOne
 } = require("../database/video.js");
 
 String.prototype.getUid = function () {
@@ -164,7 +166,7 @@ const video_get_download = (req, res) => {
         }
     });
 };
-
+// 根据id审核视频
 const video_auditing_id = (req, res) => {
     const {
         uid: videoId,
@@ -174,6 +176,17 @@ const video_auditing_id = (req, res) => {
     auditingByUid(videoId,JSON.parse(auditing))
     res.send('success')
 };
+
+// 根据id删除视频
+const video_delete_id = (req,res) =>{
+    const {
+        id: videoId
+    } = req.params
+    console.log(req.params);
+    deleteByUid(videoId)
+    res.send('success')
+}
+
 
 // 上传视频接口
 const video_upload = (req, res) => {
@@ -234,6 +247,32 @@ const video_upload_data = (req, res) => {
     }
 };
 
+// 修改视频信息
+const video_edit_data = (req, res) => {
+    let data = req.body
+    console.log(data);
+    // 上传条件判断 不可重复上传 不可重复录入数据库
+    if (oldpath_img && newpath_img) {
+        // res.send({
+        //     status: true
+        // });
+        rename(oldpath_img, newpath_img);
+        //将零时的资源文件重命名 并移动到对应的文件夹下
+        // 保存url 与 uid
+        data.imgUrl = newpath_img;
+        data.imgUid = data.avata[0].uid.getUid();
+        data.videoUid = data.videoUid
+        console.log(Object.keys(data));
+
+        updateOne(data.videoUid,data);
+        // 处理数据
+        ldpath_img = newpath_img = oldpath_video = newpath_video = null;
+    } else {
+        // res.send({
+        //     status: false
+        // });
+    }
+};
 // 搜索视频信息
 const video_search = (req, res) => {
     const sendRes = (data) => {
@@ -257,5 +296,7 @@ module.exports = {
     video_cover,
     video_search,
     video_auditing_id,
-    video_all_auditing
+    video_all_auditing,
+    video_delete_id,
+    video_edit_data
 };

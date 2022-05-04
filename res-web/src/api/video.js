@@ -1,6 +1,18 @@
 import axios from 'axios'
 const server = 'http://localhost:8081/video'
 
+const editVideo = async (params) => {
+    params.imageUrl && delete params.imageUrl
+    return await axios({
+        method: 'post',
+        url: server + '/editData',
+        data: {
+            ...params
+        },
+    }).then(res => res.data)
+}
+
+
 const upload = async (params) => {
     params.imageUrl && delete params.imageUrl
     return await axios({
@@ -33,6 +45,13 @@ const videoAuditing = async (uid, auditing) => {
         method: 'post',
         url: server + '/auditing',
         data: { 'auditing': auditing, 'uid': uid }
+    }).then(res => res.data)
+}
+
+const deleteVideo = async (uid) => {
+    return await axios({
+        method: 'delete',
+        url:`${server}/delete/${uid}`,
     }).then(res => res.data)
 }
 
@@ -81,5 +100,7 @@ export {
     search,
     computeVideoDownload,
     getAllAuditing,
-    videoAuditing
+    videoAuditing,
+    deleteVideo,
+    editVideo
 }

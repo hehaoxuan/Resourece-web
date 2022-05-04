@@ -9,17 +9,12 @@ import style from './index.less';
 import { videoAuditing } from '@/api/video';
 import { useState, useEffect } from 'react';
 import { withRouter,useHistory} from 'umi';
+import useRoot from '@/hooks/useRoot'
 function detailTool(props) {
   const history =useHistory()
+  const isRoot = useRoot()
   const { url, uid, auditing, handleAuditing } = props;
-  const [isRoot, setisRoot] = useState(false);
-  useEffect(() => {
-    if (getCookie('authority') && JSON.parse(getCookie('authority'))) {
-      setisRoot(true);
-    }else{
-      setisRoot(false)
-    }
-  }, []);
+
   const handleClick = () => {
     let a = document.createElement('a');
     a.href = url;
