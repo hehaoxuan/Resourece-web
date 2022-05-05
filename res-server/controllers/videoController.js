@@ -187,7 +187,6 @@ const video_delete_id = (req,res) =>{
     res.send('success')
 }
 
-
 // 上传视频接口
 const video_upload = (req, res) => {
     res.send("upload success!");
@@ -253,9 +252,9 @@ const video_edit_data = (req, res) => {
     console.log(data);
     // 上传条件判断 不可重复上传 不可重复录入数据库
     if (oldpath_img && newpath_img) {
-        // res.send({
-        //     status: true
-        // });
+        res.send({
+            status: true
+        });
         rename(oldpath_img, newpath_img);
         //将零时的资源文件重命名 并移动到对应的文件夹下
         // 保存url 与 uid
@@ -268,9 +267,9 @@ const video_edit_data = (req, res) => {
         // 处理数据
         ldpath_img = newpath_img = oldpath_video = newpath_video = null;
     } else {
-        // res.send({
-        //     status: false
-        // });
+        res.send({
+            status: false
+        });
     }
 };
 // 搜索视频信息

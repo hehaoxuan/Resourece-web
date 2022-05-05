@@ -17,7 +17,7 @@ const userPopover = (props) => {
           <p>用户名:{username}</p>
 
           <div className={style.buttonGroup}>
-            <Button className={style.button}>我的上传</Button>
+            {/* <Button className={style.button}>我的上传</Button> */}
             <Button className={style.button}>修改密码</Button>
             <Button
               danger

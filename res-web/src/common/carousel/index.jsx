@@ -1,28 +1,43 @@
-import { Carousel } from 'antd';
-import style from './index.less'
-const contentStyle = {
-  height: '6rem',
-  color: '#fff',
-  lineHeight: '6rem',
-  textAlign: 'center',
-  background: '#364d79',
-};
+import { Carousel, Typography } from 'antd';
+import { getAllAuditing, computeCover } from '@/api/video';
+import style from './index.less';
+import { useState, useEffect } from 'react';
+const { Title } = Typography;
 
-export default () => (
-  <div className={style.carousel}>
-    <Carousel autoplay>
-      <div>
-        <h3 style={contentStyle}>1</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>2</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>3</h3>
-      </div>
-      <div>
-        <h3 style={contentStyle}>4</h3>
-      </div>
-    </Carousel>
-  </div>
-);
+export default () => {
+  const [listData, setListData] = useState(null);
+  useEffect(() => {
+    getAllAuditing(true).then((res) => {
+      if (res.length >= 8) {
+        res = res.slice(0, 8);
+        setListData(res);
+      } else {
+        setListData(res);
+      }
+    });
+  }, []);
+
+  return (
+    <div className={style.carousel}>
+      <Carousel autoplay>
+        {listData &&
+          listData.map((item) => {
+            return (
+              <div key={item._id}>
+                <Title className={style.title} level={3}>
+                  <span className={style.shadow}>{item.title}</span>
+                </Title>
+                <Title className={style.describe} level={4}>
+                  <span className={style.shadow}>{item.describe}</span>
+                </Title>
+                <img
+                  className={style.contentStyle}
+                  src={computeCover(item.videoUid)}
+                ></img>
+              </div>
+            );
+          })}
+      </Carousel>
+    </div>
+  );
+};
