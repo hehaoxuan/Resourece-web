@@ -51,13 +51,17 @@ const findByUsername = (username, sendRes) => {
 }
 
 
-const changepd = (myobj) => {
+const changePwd = (myobj) => {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db(rdb);
-        dbo.collection(rcollection).insertOne(myobj, function (err, res) {
+        dbo.collection(rcollection).updateOne({
+            username: myobj.username
+        }, {
+            $set: {password: myobj.newPassword}
+        }, function (err, res) {
             if (err) throw err;
-            console.log("文档插入成功");
+            console.log("文档更新成功");
             db.close();
         });
     });
@@ -67,6 +71,6 @@ module.exports = {
     createCollection,
     connectDB,
     insert,
-    changepd,
+    changePwd,
     findByUsername
 }
