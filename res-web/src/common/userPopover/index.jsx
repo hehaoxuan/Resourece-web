@@ -23,8 +23,7 @@ const userPopover = (props) => {
 
           <div className={style.buttonGroup}>
             {/* <Button className={style.button}>我的上传</Button> */}
-            <Button className={style.button}>修改密码</Button>
-            <Button className={style.button}>我的上传</Button>
+            {/* <Button className={style.button}>我的上传</Button> */}
             <Button
              className={style.button}
              onClick={() => handleChangePassword()}>修改密码</Button>
