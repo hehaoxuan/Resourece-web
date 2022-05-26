@@ -15,9 +15,10 @@ let strarr = []
 
 const user_sendVcode = (req, res) => {
     const { id } = JSON.parse(Object.keys(req.body)[0]);
+    console.log(id);
     let str = randomStr(6) //生成6位随机验证码
     /* 调用邮箱服务 发送邮件 */
-    // sendEmail(str,'851889398@qq.com')
+    sendEmail(str,'851889398@qq.com')
     console.log('验证码为' + str);
 
     /* 先找有无重复,若重复则删除原来的数据 */

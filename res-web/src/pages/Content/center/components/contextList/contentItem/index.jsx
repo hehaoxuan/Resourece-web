@@ -19,6 +19,7 @@ const { Meta } = Card;
 function index(props) {
   const { title, description, onClick, uid, key } = props;
   const RefreshContext = createContext({});
+  const [deleteOne,handleDelteOne] = useState(false);
   const isRoot = useRoot();
   const history = useHistory()
   const test = useContext(RefreshContext)
@@ -29,11 +30,15 @@ function index(props) {
   }
   
   function confirm(e) {
-    deleteVideo(uid)
+    deleteVideo(uid).then(res=>{
+      if(res){
+        message.success('删除成功')
+        handleDelteOne(!deleteOne)
+      }
+    })
   }
 
   function cancel(e) {
-
   }
 
   return (

@@ -1,24 +1,24 @@
 import React, { Component, Fragment } from 'react';
 import ContextList from '@/pages/content/center/components/contextList';
 import PageHead from '@/common/pageHead';
-import { getAll,getAllAuditing } from '@/api/video';
-export default class index extends Component {
-  state = {listData:null};
-  componentDidMount() {
+import { getAll, getAllAuditing } from '@/api/video';
+import { useState, useEffect, useCallback } from 'react';
+
+const index = () => {
+  const [listData, setListData] = useState(null);
+  useEffect(() => {
     getAllAuditing(true).then((res) => {
-      this.setState({ listData: res });
-      console.log(this.state);
+      setListData(res);
     });
-  }
-  render() {
-    return (
-      <Fragment>
-        <PageHead
-          navData={{ title: '素材中心', subTitle: '当下最热门的素材' }}
-        />
-        {/* 内容中心 */}
-        <ContextList listData={this.state.listData}/>
-      </Fragment>
-    );
-  }
-}
+  }, []);
+
+  return (
+    <Fragment>
+      <PageHead navData={{ title: '素材中心', subTitle: '当下最热门的素材' }} />
+      {/* 内容中心 */}
+      <ContextList listData={listData} />
+    </Fragment>
+  );
+};
+
+export default index;
