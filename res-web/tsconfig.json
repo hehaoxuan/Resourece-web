@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "es6",
+    "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "importHelpers": true,
@@ -14,7 +14,18 @@
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"]
     },
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "allowJs": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
   },
   "include": [
     "mock/**/*",
